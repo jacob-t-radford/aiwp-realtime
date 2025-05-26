@@ -27,10 +27,10 @@ Cron job initiates `run_gfs.sh` and `run_ifs.sh` twice daily.
 
 Ken Fenton can probably help if any NODD problems arise (ken.fenton@noaa.gov)  
 Address: `s3://noaa-oar-mlwp-data`  
-Credentials and config in `/mnt/aiweathernas/aiwp_realtime/.aws/`
+Credentials and config in `/mnt/aiweathernas/aiwp-realtime/.aws/`
 
 ```
-cp -r /mnt/aiweathernas/aiwp_realtime/.aws ~/.aws
+cp -r /mnt/aiweathernas/aiwp-realtime/.aws ~/.aws
 ```
 
 Other things in the bucket generally not requiring modification:
@@ -94,29 +94,29 @@ pip install jax[cuda12]==0.5.0
 pip install dm-haiku==0.0.13
 pip install pygrib
 
-aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/fcnv2 /mnt/aiweathernas/aiwp_realtime/assets/fcnv2/
-aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/pw /mnt/aiweathernas/aiwp_realtime/assets/pw/
-aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/au /mnt/aiweathernas/aiwp_realtime/assets/au/
-aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/gc /mnt/aiweathernas/aiwp_realtime/assets/gc/
+aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/fcnv2 /mnt/aiweathernas/aiwp-realtime/assets/fcnv2/
+aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/pw /mnt/aiweathernas/aiwp-realtime/assets/pw/
+aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/au /mnt/aiweathernas/aiwp-realtime/assets/au/
+aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/gc /mnt/aiweathernas/aiwp-realtime/assets/gc/
 ```
 
 ### Code Modifications  
 
-#### In ai_models_gfs/model.py (GFS environment)
+#### In ~/anaconda3/envs/aiwp_realtime/lib/python3.11/site-packages/ai_models_gfs/model.py (GFS environment)
 
 ```
 import py3nvml
 py3nvml.grab_gpus(num_gpus=1, gpu_select=[0])
 ```
 
-#### In ai_models/model.py (IFS environment)  
+#### In ~/anaconda3/envs/aiwp_realtime_ifs/lib/python3.11/site-packages/ai_models/model.py (IFS environment)  
 
 ```
 import py3nvml
 py3nvml.grab_gpus(num_gpus=1, gpu_select=[0])
 ```
 
-#### In ai_models_fourcastnetv2/model.py  
+#### In ~/anaconda3/envs/aiwp_realtime/lib/python3.11/site-packages/ai_models_fourcastnetv2_gfs/model.py
 
 ```
 checkpoint = torch.load(checkpoint_file, map_location=self.device)
@@ -124,7 +124,7 @@ checkpoint = torch.load(checkpoint_file, map_location=self.device)
 checkpoint = torch.load(checkpoint_file, map_location=self.device, weights_only=False)
 ```
 
-#### In ai_models_fourcastnetv2/model.py  
+#### In ~/anaconda3/envs/aiwp_realtime_ifs/lib/python3.11/site-packages/ai_models_fourcastnetv2/model.py
 
 ```
 checkpoint = torch.load(checkpoint_file, map_location=self.device)
@@ -132,22 +132,22 @@ checkpoint = torch.load(checkpoint_file, map_location=self.device)
 checkpoint = torch.load(checkpoint_file, map_location=self.device, weights_only=False)
 ```
 
-#### Update environment and cwd paths in run_gfs.py
+#### Update environment and cwd paths in run_gfs.sh
 
 ```
 #Path to GFS environment (Currently assumes home directory)  
 aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime
 #Path to working directory
-aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
+aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp-realtime
 ```
 
-#### Update environment and cwd paths in run_ifs.py  
+#### Update environment and cwd paths in run_ifs.sh  
 
 ```
 #Path to IFS environment (Currently assumes home directory)  
 aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_ifs
 #Path to working directory
-aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
+aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp-realtime
 ```
 
 ### Cron
@@ -159,8 +159,8 @@ crontab -e
 Add the following lines:
 
 ```
-30 3,15 * * * bash /mnt/aiweathernas/aiwp_realtime/run_gfs.sh > /mnt/aiweathernas/aiwp_realtime/gfs.log 2>&1
-30 7,19 * * * bash /mnt/aiweathernas/aiwp_realtime/run_ifs.sh > /mnt/aiweathernas/aiwp_realtime/ifs.log 2>&1
+30 3,15 * * * bash /mnt/aiweathernas/aiwp-realtime/run_gfs.sh > /mnt/aiweathernas/aiwp-realtime/gfs.log 2>&1
+30 7,19 * * * bash /mnt/aiweathernas/aiwp-realtime/run_ifs.sh > /mnt/aiweathernas/aiwp-realtime/ifs.log 2>&1
 ```
 
 

@@ -1,10 +1,10 @@
 #!/bin/bash
 
 #Path to IFS environment
-aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_ifs
+aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_ifs_test
 
 #Path to working directory
-aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp_realtime
+aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp-realtime
 
 #Various commands
 export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
