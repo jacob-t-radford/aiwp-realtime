@@ -98,6 +98,8 @@ aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/
 aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/pw /mnt/aiweathernas/aiwp-realtime/assets/pw/
 aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/au /mnt/aiweathernas/aiwp-realtime/assets/au/
 aws s3 cp --recursive --no-sign-request s3://noaa-oar-mlwp-data/colab_resources/gc /mnt/aiweathernas/aiwp-realtime/assets/gc/
+
+conda deactivate
 ```
 
 ### Code Modifications  
