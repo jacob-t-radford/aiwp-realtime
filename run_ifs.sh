@@ -4,7 +4,7 @@
 aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_ifs
 
 #Path to working directory
-aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
+aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp_realtime
 
 #Various commands
 export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
@@ -33,6 +33,11 @@ YEAR=$(date -u -d "$rounded_datetime" +"%Y")
 MONTH=$(date -u -d "$rounded_datetime" +"%m")
 DAY=$(date -u -d "$rounded_datetime" +"%d")
 HH=$(date -u -d "$rounded_datetime" +"%H")
+
+YEAR=2025
+MONTH=05
+DAY=26
+HH=00
 
 # Check if initial conditions available
 url="https://data.ecmwf.int/forecasts/${YEAR}${MONTH}${DAY}/${HH}z/ifs/0p25/oper/${YEAR}${MONTH}${DAY}${HH}0000-0h-oper-fc.grib2"

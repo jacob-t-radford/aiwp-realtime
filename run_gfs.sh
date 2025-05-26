@@ -1,7 +1,10 @@
 #!/bin/bash
 
+#Path to GFS environment
 aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime
-aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
+
+#Path to working directory
+aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp_realtime
 
 export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
 aimodels=${aiwp_realtime_env_path}/bin/ai-models-gfs
@@ -9,6 +12,7 @@ python=${aiwp_realtime_env_path}/bin/python
 aws=${aiwp_realtime_env_path}/bin/aws
 s3bucket=s3://noaa-oar-mlwp-data
 
+echo ${aiwp_realtime_cwd_path}/output_data/
 rm -r ${aiwp_realtime_cwd_path}/output_data/*
 
 current_datetime=$(date -u +"%Y-%m-%d %H:%M:%S")
@@ -27,6 +31,11 @@ YEAR=$(date -u -d "$rounded_datetime" +"%Y")
 MONTH=$(date -u -d "$rounded_datetime" +"%m")
 DAY=$(date -u -d "$rounded_datetime" +"%d")
 HH=$(date -u -d "$rounded_datetime" +"%H")
+
+YEAR=2025
+MONTH=05
+DAY=26
+HH=00
 
 # Check if initial conditions available
 url="https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.${YEAR}${MONTH}${DAY}/${HH}/atmos/gfs.t${HH}z.pgrb2.0p25.f000"
