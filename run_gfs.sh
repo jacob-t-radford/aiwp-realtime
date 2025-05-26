@@ -1,10 +1,15 @@
 #!/bin/bash
 
-export LD_LIBRARY_PATH=/home/jradford/anaconda3/envs/aiwp_realtime/lib/python3.11/site-packages/nvidia/cudnn/lib
-aimodels=/home/jradford/anaconda3/envs/aiwp_realtime/bin/ai-models-gfs
-python=/home/jradford/anaconda3/envs/aiwp_realtime/bin/python
+aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime
+aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
 
-rm -r /mnt/aiweathernas/aiwp_realtime/output_data/*
+export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
+aimodels=${aiwp_realtime_env_path}/bin/ai-models-gfs
+python=${aiwp_realtime_env_path}/bin/python
+aws=${aiwp_realtime_env_path}/bin/aws
+s3bucket=s3://noaa-oar-mlwp-data
+
+rm -r ${aiwp_realtime_cwd_path}/output_data/*
 
 current_datetime=$(date -u +"%Y-%m-%d %H:%M:%S")
 
@@ -42,10 +47,10 @@ while true; do
     sleep 30
 done
 
-fcnv2head=/mnt/aiweathernas/aiwp_realtime/output_data/FOUR_v200_GFS/${YEAR}/${MONTH}${DAY}
-pwhead=/mnt/aiweathernas/aiwp_realtime/output_data/PANG_v100_GFS/${YEAR}/${MONTH}${DAY}
-gchead=/mnt/aiweathernas/aiwp_realtime/output_data/GRAP_v100_GFS/${YEAR}/${MONTH}${DAY}
-auhead=/mnt/aiweathernas/aiwp_realtime/output_data/AURO_v100_GFS/${YEAR}/${MONTH}${DAY}
+fcnv2head=${aiwp_realtime_cwd_path}/output_data/FOUR_v200_GFS/${YEAR}/${MONTH}${DAY}
+pwhead=${aiwp_realtime_cwd_path}/output_data/PANG_v100_GFS/${YEAR}/${MONTH}${DAY}
+gchead=${aiwp_realtime_cwd_path}/output_data/GRAP_v100_GFS/${YEAR}/${MONTH}${DAY}
+auhead=${aiwp_realtime_cwd_path}/output_data/AURO_v100_GFS/${YEAR}/${MONTH}${DAY}
 
 fcnv2tail=FOUR_v200_GFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06
 pwtail=PANG_v100_GFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06
@@ -57,10 +62,10 @@ pwpath=${pwhead}/${pwtail}
 gcpath=${gchead}/${gctail}
 aupath=${auhead}/${autail}
 
-fcnv2assets=/mnt/aiweathernas/aiwp_realtime/assets/fcnv2
-pwassets=/mnt/aiweathernas/aiwp_realtime/assets/pw
-gcassets=/mnt/aiweathernas/aiwp_realtime/assets/gc
-auassets=/mnt/aiweathernas/aiwp_realtime/assets/au
+fcnv2assets=${aiwp_realtime_cwd_path}/assets/fcnv2
+pwassets=${aiwp_realtime_cwd_path}/assets/pw
+gcassets=${aiwp_realtime_cwd_path}/assets/gc
+auassets=${aiwp_realtime_cwd_path}/assets/au
 
 mkdir -p ${fcnv2head}
 mkdir -p ${pwhead}
@@ -73,18 +78,23 @@ mkdir -p ${auhead}
 
 # Run FourCastNetV2-small
 ${aimodels} --input gfs --assets ${fcnv2assets} --date ${YEAR}${MONTH}${DAY} --time ${HH}00 --path ${fcnv2path} fourcastnetv2-small
-${python} /mnt/aiweathernas/aiwp_realtime/grib2nc.py ${fcnv2path} GFS fourcastnetv2-small ${YEAR}${MONTH}${DAY} ${HH}00 &
+${python} ${aiwp_realtime_cwd_path}/grib2nc.py ${fcnv2path} GFS fourcastnetv2-small ${YEAR}${MONTH}${DAY} ${HH}00 &
 
 # Run PanguWeather
 ${aimodels} --input gfs --assets ${pwassets} --date ${YEAR}${MONTH}${DAY} --time ${HH}00 --path ${pwpath} panguweather
-${python} /mnt/aiweathernas/aiwp_realtime/grib2nc.py ${pwpath} GFS panguweather ${YEAR}${MONTH}${DAY} ${HH}00 &
+${python} ${aiwp_realtime_cwd_path}/grib2nc.py ${pwpath} GFS panguweather ${YEAR}${MONTH}${DAY} ${HH}00 &
 
 # Run GraphCast
 ${aimodels} --input gfs --assets ${gcassets} --date ${YEAR}${MONTH}${DAY} --time ${HH}00 --path ${gcpath} graphcast
-${python} /mnt/aiweathernas/aiwp_realtime/grib2nc.py ${gcpath} GFS graphcast ${YEAR}${MONTH}${DAY} ${HH}00 &
+${python} ${aiwp_realtime_cwd_path}/grib2nc.py ${gcpath} GFS graphcast ${YEAR}${MONTH}${DAY} ${HH}00 &
 
 # Run Aurora
 ${aimodels} --input gfs --assets ${auassets} --date ${YEAR}${MONTH}${DAY} --time ${HH}00 --path ${aupath} aurora --model-version 0.25-finetuned
-${python} /mnt/aiweathernas/aiwp_realtime/grib2nc.py ${aupath} GFS aurora ${YEAR}${MONTH}${DAY} ${HH}00 &
+${python} ${aiwp_realtime_cwd_path}/grib2nc.py ${aupath} GFS aurora ${YEAR}${MONTH}${DAY} ${HH}00 &
 
 wait
+
+rm ${fcnv2path}
+rm ${pwpath}
+rm ${gcpath}
+rm ${aupath}
