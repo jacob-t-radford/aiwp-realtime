@@ -118,14 +118,6 @@ import py3nvml
 py3nvml.grab_gpus(num_gpus=1, gpu_select=[0])
 ```
 
-#### In ~/anaconda3/envs/aiwp_realtime/lib/python3.11/site-packages/ai_models_fourcastnetv2_gfs/model.py
-
-```
-checkpoint = torch.load(checkpoint_file, map_location=self.device)
-# To:
-checkpoint = torch.load(checkpoint_file, map_location=self.device, weights_only=False)
-```
-
 #### In ~/anaconda3/envs/aiwp_realtime_ifs/lib/python3.11/site-packages/ai_models_fourcastnetv2/model.py
 
 ```
