@@ -1,16 +1,22 @@
 #!/bin/bash
 
+#Path to IFS environment
 aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_ifs
+
+#Path to working directory
 aiwp_realtime_cwd_path=${aiwp_realtime_cwd_path}
 
+#Various commands
 export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
 aimodels=${aiwp_realtime_env_path}/bin/ai-models-gfs
 python=${aiwp_realtime_env_path}/bin/python
 aws=${aiwp_realtime_env_path}/bin/aws
 s3bucket=s3://noaa-oar-mlwp-data
 
+#Remove pre-existing data
 rm -r ${aiwp_realtime_cwd_path}/output_data/*
 
+#Get dates/times
 current_datetime=$(date -u +"%Y-%m-%d %H:%M:%S")
 
 # Convert current_datetime to timestamp
@@ -47,6 +53,7 @@ while true; do
     sleep 30
 done
 
+#Preconfigures paths
 fcnv2head=${aiwp_realtime_cwd_path}/output_data/FOUR_v200_IFS/${YEAR}/${MONTH}${DAY}
 pwhead=${aiwp_realtime_cwd_path}/output_data/PANG_v100_IFS/${YEAR}/${MONTH}${DAY}
 gchead=${aiwp_realtime_cwd_path}/output_data/GRAP_v100_IFS/${YEAR}/${MONTH}${DAY}
@@ -94,6 +101,7 @@ ${python} ${aiwp_realtime_cwd_path}/grib2nc.py ${aupath} IFS aurora ${YEAR}${MON
 
 wait
 
+#Remove grib files
 rm ${fcnv2path}
 rm ${pwpath}
 rm ${gcpath}
