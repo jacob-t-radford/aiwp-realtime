@@ -154,8 +154,7 @@ def grib2nc(infile, initconditions, model, date, time):
 # Functions to create variables in the NetCDF file
 def create_variable(f, name, dimensions, data, attrs, chunksizes):
     dtype = 'i4' if name in ['time', 'level'] else 'f4'
-    var = f.createVariable(name, dtype, dimensions, chunksizes=chunksizes)
-#    var = f.createVariable(name, dtype, dimensions, compression='zlib', complevel=4, chunksizes=chunksizes)
+    var = f.createVariable(name, dtype, dimensions, compression='zlib', complevel=4, chunksizes=chunksizes)
     if data is not None:
         var[:] = data
     for attr_name, attr_value in attrs.items():
@@ -163,8 +162,7 @@ def create_variable(f, name, dimensions, data, attrs, chunksizes):
 
 def create_variable_nochunk(f, name, dimensions, data, attrs):
     dtype = 'i4' if name in ['time', 'level'] else 'f4'
-    var = f.createVariable(name, dtype, dimensions)
- #   var = f.createVariable(name, dtype, dimensions, compression='zlib', complevel=4)
+    var = f.createVariable(name, dtype, dimensions, compression='zlib', complevel=4)
     var[:] = data
     for attr_name, attr_value in attrs.items():
         var.setncattr(attr_name, attr_value)
