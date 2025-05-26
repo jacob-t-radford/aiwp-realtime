@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Path to GFS environment
-aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime_test
+aiwp_realtime_env_path=~/anaconda3/envs/aiwp_realtime
 
 #Path to working directory
 aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp-realtime
