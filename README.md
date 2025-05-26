@@ -56,7 +56,11 @@ In the event of any discrepancies, the version on the S3 bucket should be consid
 
 ## Instructions to Set Up from Scratch
 
-```git clone https://github.com/jacob-t-radford/aiwp-realtime.git```
+```
+cd /mnt/aiweathernas/
+git clone https://github.com/jacob-t-radford/aiwp-realtime.git
+cd aiwp-realtime
+```
 
 ### Environment Configurations
 
