@@ -8,7 +8,7 @@ aiwp_realtime_cwd_path=/mnt/aiweathernas/aiwp-realtime
 
 #Various commands
 export LD_LIBRARY_PATH=${aiwp_realtime_env_path}/lib/python3.11/site-packages/nvidia/cudnn/lib
-aimodels=${aiwp_realtime_env_path}/bin/ai-models-gfs
+aimodels=${aiwp_realtime_env_path}/bin/ai-models-ifs
 python=${aiwp_realtime_env_path}/bin/python
 aws=${aiwp_realtime_env_path}/bin/aws
 s3bucket=s3://noaa-oar-mlwp-data
