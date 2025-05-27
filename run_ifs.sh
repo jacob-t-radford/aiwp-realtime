@@ -106,3 +106,8 @@ rm ${fcnv2path}
 rm ${pwpath}
 rm ${gcpath}
 rm ${aupath}
+
+${aws} s3 cp ${fcnv2path}.nc s3://noaa-oar-mlwp-data/FOUR_v200_IFS/${YEAR}/${MONTH}${DAY}/FOUR_v200_IFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06.nc --profile noaa
+${aws} s3 cp ${fcnv2path}.nc s3://noaa-oar-mlwp-data/PANG_v100_IFS/${YEAR}/${MONTH}${DAY}/PANG_v100_IFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06.nc --profile noaa
+${aws} s3 cp ${fcnv2path}.nc s3://noaa-oar-mlwp-data/GRAP_v100_IFS/${YEAR}/${MONTH}${DAY}/GRAP_v100_IFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06.nc --profile noaa
+${aws} s3 cp ${fcnv2path}.nc s3://noaa-oar-mlwp-data/AURO_v100_IFS/${YEAR}/${MONTH}${DAY}/AURO_v100_IFS_${YEAR}${MONTH}${DAY}${HH}_f000_f240_06.nc --profile noaa
