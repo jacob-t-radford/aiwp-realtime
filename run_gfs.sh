@@ -32,11 +32,6 @@ MONTH=$(date -u -d "$rounded_datetime" +"%m")
 DAY=$(date -u -d "$rounded_datetime" +"%d")
 HH=$(date -u -d "$rounded_datetime" +"%H")
 
-YEAR=2025
-MONTH=05
-DAY=26
-HH=00
-
 # Check if initial conditions available
 url="https://noaa-gfs-bdp-pds.s3.amazonaws.com/gfs.${YEAR}${MONTH}${DAY}/${HH}/atmos/gfs.t${HH}z.pgrb2.0p25.f000"
 # Loop to check the URL every 30 seconds
