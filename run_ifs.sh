@@ -34,11 +34,6 @@ MONTH=$(date -u -d "$rounded_datetime" +"%m")
 DAY=$(date -u -d "$rounded_datetime" +"%d")
 HH=$(date -u -d "$rounded_datetime" +"%H")
 
-YEAR=2025
-MONTH=05
-DAY=26
-HH=00
-
 # Check if initial conditions available
 url="https://data.ecmwf.int/forecasts/${YEAR}${MONTH}${DAY}/${HH}z/ifs/0p25/oper/${YEAR}${MONTH}${DAY}${HH}0000-0h-oper-fc.grib2"
 # Loop to check the URL every 30 seconds
