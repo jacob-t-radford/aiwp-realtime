@@ -109,7 +109,8 @@ def grib2nc(infile, initconditions, model, date, time):
 
         # Define variables in NetCDF for both pressure level and surface variables
         for variable in unique_pl_vars + unique_sfc_vars:
-            print(variable)
+            if model=="graphcast" and variable=='r':
+                continue
             dims = ('time', 'level', 'latitude', 'longitude') if variable in unique_pl_vars else ('time', 'latitude', 'longitude')
             chunksizes = (1, 1, y_shape, x_shape) if 'level' in dims else (1, y_shape, x_shape)
             gfsequivalent = ec2gfsmap[variable]
@@ -130,6 +131,8 @@ def grib2nc(infile, initconditions, model, date, time):
             levelType = grb.levelType
             if (shortName == 'z' and levelType == 'sfc') or shortName not in ec2gfsmap.keys():
                 continue
+            if (shortName =='r' and model=='graphcast'):
+                continue
             gfsequivalent = ec2gfsmap[shortName]
             vals = grb.values
 
@@ -138,6 +141,16 @@ def grib2nc(infile, initconditions, model, date, time):
                 f.variables[gfsequivalent][timestep, levelind, :, :] = vals
             elif levelType == 'sfc':
                 f.variables[gfsequivalent][timestep, :, :] = vals
+
+        # Recalculate apcp as 6-hourly differences if present
+        if model=="graphcast":
+            if 'apcp' in f.variables:
+                apcp_data = f.variables['apcp'][:]
+                # Calculate 6-hourly differences (with apcp[0] as-is)
+                apcp_diff = np.empty_like(apcp_data)
+                apcp_diff[0] = apcp_data[0]  # First timestep stays the same
+                apcp_diff[1:] = apcp_data[1:] - apcp_data[:-1]
+                f.variables['apcp'][:] = apcp_diff
 
         # Add global attributes to the NetCDF file
         f.Conventions = 'CF-1.8'
@@ -172,6 +185,9 @@ initconditions = sys.argv[2]
 model = sys.argv[3]
 date = sys.argv[4]
 time = sys.argv[5]
+
+#Call the function
+grib2nc(infile, initconditions, model, date, time)
 
 #Call the function
 grib2nc(infile, initconditions, model, date, time)
