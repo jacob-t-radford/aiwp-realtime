@@ -157,6 +157,25 @@ Add the following lines:
 30 7,19 * * * bash /mnt/aiweathernas/aiwp-realtime/run_ifs.sh > /mnt/aiweathernas/aiwp-realtime/ifs.log 2>&1
 ```
 
+## Visualization Pipeline
+
+This section includes instructions for producing vector tiles to be uploaded to the CIRA web server for interactive visualization.  
+
+- Read NetCDF files
+- Generate Matplotlib contours
+- Convert contours to geojson files with geojsoncontour
+- Simplify geojson files with Mapshaper
+- Convert simplified geojsons to vector tiles with Tippecanoe
+- Upload vector tiles to web server
+
+### Environment Configuration
+
+**The visualization code tends to be very sensitive to versioning.**
+
+```bash
+conda create --name aiwp_realtime_contouring python=3.11
+conda activate aiwp_realtime_contouring
+```
 
 
 
