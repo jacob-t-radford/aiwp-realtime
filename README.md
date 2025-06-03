@@ -159,7 +159,7 @@ Add the following lines:
 
 ## Visualization Pipeline
 
-This section includes instructions for producing vector tiles to be uploaded to the CIRA web server for interactive visualization.  
+This section includes instructions for producing vector tiles to be uploaded to the CIRA web server for interactive visualization. This can be thought of as an add-on to the above process. It still relies on both ai-models environments to produce netcdfs, after which it will:
 
 - Read NetCDF files
 - Generate Matplotlib contours
@@ -173,8 +173,39 @@ This section includes instructions for producing vector tiles to be uploaded to 
 **The visualization code tends to be very sensitive to versioning.**
 
 ```bash
+
+#Install NodeJS and Mapshaper
+
+curl -O https://nodejs.org/dist/v20.12.2/node-v20.12.2-linux-x64.tar.xz
+tar -xf node-v20.12.2-linux-x64.tar.xz
+mv node-v20.12.2-linux-x64 nodejs
+nodejs/bin/npm install mapshaper
+
+#Configure Python environment
+
 conda create --name aiwp_realtime_contouring python=3.11
 conda activate aiwp_realtime_contouring
+conda install -c conda-forge numpy==1.26.0
+pip install xarray==2023.9.0
+pip install matplotlib==3.7.2
+conda install -c conda-forge scipy==1.11.2
+pip install geojsoncontour==0.4.0
+pip install metpy==1.5.1
+conda install -c conda-forge netcdf4==1.6.4
+conda install -c conda-forge tippecanoe==1.36.0
+```
+
+### Cron
+
+```
+crontab -e
+```
+
+Remove existing entries and add the following lines:
+
+```
+30 3,15 * * * bash /mnt/aiweathernas/aiwp-realtime/run_gfs_with_contouring.sh > /mnt/aiweathernas/aiwp-realtime/gfs_vis.log 2>&1
+30 7,19 * * * bash /mnt/aiweathernas/aiwp-realtime/run_ifs_with_contouring.sh > /mnt/aiweathernas/aiwp-realtime/ifs_vis.log 2>&1
 ```
 
 
