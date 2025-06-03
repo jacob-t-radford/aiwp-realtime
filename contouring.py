@@ -313,7 +313,7 @@ if __name__ == "__main__":
     year, month, day, init, model, init_cond, model_file, geojson_path = sys.argv[1:9]
     outdir = Path(f"{geojson_path}/{year}{month}{day}_{init}/{model}_{init_cond}")
     outdir.mkdir(parents=True, exist_ok=True)
-    mapshaper = f"node_modules/.bin/mapshaper"
+    mapshaper = f"/mnt/aiweathernas/aiwp-realtime/node_modules/.bin/mapshaper"
 
     lons, lons_extended, lats = prepare_lons_lats(model)
     
